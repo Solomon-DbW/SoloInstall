@@ -3,20 +3,21 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "archinstall"
-version = "3.0.13"
-description = "Arch Linux installer - guided, templates etc."
+name = "soloinstall"
+version = "1.0.0"
+description = "SoloLinux installer — guided and modular, based on Archinstall."
 authors = [
-    {name = "Anton Hvornum", email = "anton@hvornum.se"},
+    {name = "Solomon Fosuhene", email = "your-email@example.com"},
 ]
 license = "GPL-3.0-only"
 readme = "README.md"
 requires-python = ">=3.12"
-keywords = ["linux", "arch", "archinstall", "installer"]
+keywords = ["linux", "sololinux", "soloinstall", "installer"]
 classifiers = [
     "Programming Language :: Python :: 3.12",
     "Operating System :: POSIX :: Linux",
 ]
+
 dependencies = [
     "pyparted>=3.13.0",
     "pydantic==2.12.4",
@@ -25,10 +26,33 @@ dependencies = [
     "pytest-mock>=3.15.1",
 ]
 
+# [project]
+# name = "archinstall"
+# version = "3.0.13"
+# description = "Arch Linux installer - guided, templates etc."
+# authors = [
+#     {name = "Anton Hvornum", email = "anton@hvornum.se"},
+# ]
+# license = "GPL-3.0-only"
+# readme = "README.md"
+# requires-python = ">=3.12"
+# keywords = ["linux", "arch", "archinstall", "installer"]
+# classifiers = [
+#     "Programming Language :: Python :: 3.12",
+#     "Operating System :: POSIX :: Linux",
+# ]
+# dependencies = [
+#     "pyparted>=3.13.0",
+#     "pydantic==2.12.4",
+#     "cryptography>=45.0.7",
+#     "textual>=5.3.0",
+#     "pytest-mock>=3.15.1",
+# ]
+
 [project.urls]
 Home = "https://archlinux.org"
-Documentation = "https://archinstall.readthedocs.io/"
-Source = "https://github.com/archlinux/archinstall"
+Documentation = "https://soloinstall.readthedocs.io/"
+Source = "https://github.com/archlinux/soloinstall"
 
 [project.optional-dependencies]
 log = ["systemd_python==235"]
@@ -43,17 +67,20 @@ dev = [
 doc = ["sphinx"]
 
 [project.scripts]
-archinstall = "archinstall:run_as_a_module"
+# soloinstall = "soloinstall:run_as_a_module"
+soloinstall = "soloinstall.__main__:main"
 
 [tool.setuptools.dynamic]
 readme = {file = ["README.rst", "USAGE.rst"]}
 
 [tool.setuptools]
 include-package-data = true
+packages = ["soloinstall"]
+
 
 [tool.setuptools.package-data]
 # We could specify locales/languages.json etc instead, but catchall works too.
-"archinstall" = [
+"soloinstall" = [
     "**/*.py",
     "**/*.mo",
     "**/*.po",
@@ -62,7 +89,7 @@ include-package-data = true
 ]
 
 [tool.setuptools.package-dir]
-archinstall = "archinstall"
+soloinstall = "soloinstall"
 
 [tool.mypy]
 python_version = "3.12"
@@ -89,33 +116,33 @@ strict = true
 warn_unreachable = true
 
 [[tool.mypy.overrides]]
-module = "archinstall.default_profiles.*"
+module = "soloinstall.default_profiles.*"
 disallow_any_explicit = true
 
 [[tool.mypy.overrides]]
-module = "archinstall.examples.*"
+module = "soloinstall.examples.*"
 disallow_any_explicit = true
 
 [[tool.mypy.overrides]]
-module = "archinstall.lib.*"
+module = "soloinstall.lib.*"
 warn_return_any = false
 
 [[tool.mypy.overrides]]
-module = "archinstall.lib.disk.*"
+module = "soloinstall.lib.disk.*"
 # 'Any' imports are allowed because pyparted doesn't have type hints
 disallow_any_unimported = false
 
 [[tool.mypy.overrides]]
-module = "archinstall.lib.models.*"
+module = "soloinstall.lib.models.*"
 # 'Any' imports are allowed because pyparted doesn't have type hints
 disallow_any_unimported = false
 
 [[tool.mypy.overrides]]
-module = "archinstall.lib.packages"
+module = "soloinstall.lib.packages"
 disallow_any_explicit = true
 
 [[tool.mypy.overrides]]
-module = "archinstall.lib.utils"
+module = "soloinstall.lib.utils"
 disallow_any_explicit = true
 
 [[tool.mypy.overrides]]
@@ -125,7 +152,7 @@ module = [
 ignore_missing_imports = true
 
 [tool.bandit]
-targets = ["archinstall"]
+targets = ["soloinstall"]
 exclude = ["/tests"]
 
 [tool.pytest.ini_options]

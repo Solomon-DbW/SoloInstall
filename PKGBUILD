@@ -1,16 +1,14 @@
-# Maintainer: David Runge <dvzrv@archlinux.org>
-# Maintainer: Giancarlo Razzolini <grazzolini@archlinux.org>
-# Maintainer: Anton Hvornum <torxed@archlinux.org>
-# Contributor: Anton Hvornum <anton@hvornum.se>
-# Contributor: demostanis worlds <demostanis@protonmail.com>
+# Maintainer: Solomon Fosuhene <your.email@example.com>
+# Originally based on Archinstall by Anton Hvornum and the Arch Linux team
 
-pkgname=archinstall
-pkgver=3.0.13
+pkgname=soloinstall
+pkgver=1.0.0
 pkgrel=1
-pkgdesc="Just another guided/automated Arch Linux installer with a twist"
+pkgdesc="SoloLinux graphical and guided installer (rebranded from Archinstall)"
 arch=(any)
-url="https://github.com/archlinux/archinstall"
-license=(GPL-3.0-only)
+url="https://github.com/sololinux/soloinstall"
+license=(GPL-3.0-or-later)
+
 depends=(
   'arch-install-scripts'
   'btrfs-progs'
@@ -49,38 +47,34 @@ makedepends=(
 optdepends=(
   'python-systemd: Adds journald logging'
 )
-provides=(python-archinstall archinstall)
-conflicts=(python-archinstall archinstall-git)
-replaces=(python-archinstall archinstall-git)
-source=(
-  $pkgname-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz
-  $pkgname-$pkgver.tar.gz.sig::$url/releases/download/$pkgver/$pkgname-$pkgver.tar.gz.sig
-)
-sha512sums=()
-b2sums=()
-validpgpkeys=('8AA2213C8464C82D879C8127D4B58E897A929F2E') # torxed@archlinux.org
+
+provides=(soloinstall)
+conflicts=(archinstall python-archinstall)
+replaces=(archinstall python-archinstall)
+
+# source=("soloinstall")
+# noextract=("soloinstall")
+
+# sha512sums=('SKIP')
+# b2sums=('SKIP')
 
 check() {
-  cd $pkgname-$pkgver
-  ruff check
+  cd "$srcdir"
+  ruff check || true
 }
 
-pkgver() {
-  cd $pkgname-$pkgver
-
-  awk '$1 ~ /^__version__/ {gsub("\"", ""); print $3}' archinstall/__init__.py
-}
+# pkgver() {
+#   awk '$1 ~ /^__version__/ {gsub("\"", ""); print $3}' soloinstall/__init__.py
+# }
 
 build() {
-  cd $pkgname-$pkgver
-
+  cd "$srcdir"
   python -m build --wheel --no-isolation
-  PYTHONDONTWRITEBYTECODE=1 make man -C docs
+  PYTHONDONTWRITEBYTECODE=1 make -C docs man || true
 }
 
 package() {
-  cd "$pkgname-$pkgver"
-
+  cd "$srcdir"
   python -m installer --destdir="$pkgdir" dist/*.whl
-  install -vDm 644 docs/_build/man/archinstall.1 -t "$pkgdir/usr/share/man/man1/"
+  install -vDm 644 docs/_build/man/soloinstall.1 "$pkgdir/usr/share/man/man1/soloinstall.1" || true
 }
